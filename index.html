@@ -3,176 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DULA FF - Pro Code Generator</title>
+    <title>DULA FF - AI Pro Generator</title>
     <style>
         body { background-color: #0b0c10; color: #66fcf1; font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; }
         header { background: linear-gradient(90deg, #1f2833, #45a29e); padding: 50px 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
         .container { padding: 30px; }
-        .gen-card { background: #1f2833; padding: 30px; border-radius: 20px; border: 2px solid #45a29e; max-width: 500px; margin: 20px auto; box-shadow: 0 0 25px rgba(69, 162, 158, 0.3); }
-        .btn { background-color: #45a29e; color: white; padding: 15px 30px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 18px; text-transform: uppercase; }
+        .gen-card { background: #1f2833; padding: 30px; border-radius: 20px; border: 2px solid #45a29e; max-width: 500px; margin: 20px auto; }
+        .btn { background-color: #45a29e; color: white; padding: 15px 30px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 18px; width: 100%; margin-top: 10px; }
         .btn:hover { background-color: #66fcf1; color: black; box-shadow: 0 0 15px #66fcf1; }
-        .btn:disabled { background-color: #333; cursor: not-allowed; color: #777; }
-        #result-display { color: #fff; font-size: 32px; font-weight: bold; letter-spacing: 3px; margin: 20px 0; display: none; background: #0b0c10; padding: 15px; border: 2px dashed #66fcf1; border-radius: 10px; }
-        .status-msg { color: #45a29e; font-size: 14px; margin-top: 10px; }
-        .progress-bar { width: 0%; height: 5px; background: #66fcf1; transition: width 0.1s; margin-top: 10px; border-radius: 5px; }
+        #result-display { color: #fff; font-size: 32px; font-weight: bold; letter-spacing: 3px; margin: 20px 0; display: none; background: #000; padding: 15px; border: 2px dashed #66fcf1; border-radius: 10px; }
+        .loading { color: #fccb06; display: none; margin: 20px 0; font-style: italic; }
+        .redeem-link { display: none; color: #ff4c4c; font-weight: bold; text-decoration: underline; margin-top: 15px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <header>
     <h1>DULA FF GAMING</h1>
-    <p>AI Powered 12-Digit Redeem Code Generator</p>
+    <p>Powered by Groq AI Technology</p>
 </header>
 
 <div class="container">
     <div class="gen-card">
-        <h2 style="color: #fff;">🎁 FF Reward Generator</h2>
+        <h2>🤖 AI Code Generator</h2>
+        <p id="timer-text">System Activating in <span id="seconds">30</span>s...</p>
         
-        <div id="timer-box">
-            <p>System Initializing...</p>
-            <p>Please wait <span id="seconds" style="font-size: 24px; color: #ff4c4c;">30</span> seconds</p>
-        </div>
-
-        <button id="gen-btn" class="btn" style="display: none;" onclick="startGeneration()">Generate 12-Digit Code</button>
+        <button id="gen-btn" class="btn" style="display: none;" onclick="generateWithAI()">GENERATE 12-DIGIT CODE</button>
         
-        <div id="loader" style="display: none; margin-top: 20px;">
-            <p id="load-text">Connecting to Server...</p>
-            <div style="width: 100%; background: #000; height: 5px; border-radius: 5px;">
-                <div id="bar" class="progress-bar"></div>
-            </div>
-        </div>
-
+        <div id="loader" class="loading">AI is thinking... Connecting to Groq Cloud...</div>
+        
         <div id="result-display"></div>
         
-        <button id="copy-btn" class="btn" style="display: none; margin-top: 10px; background: #fccb06; color: black;" onclick="copyCode()">Copy Code</button>
-        
-        <p class="status-msg">Server Status: <span style="color: #00ff00;">Online</span></p>
+        <div id="copy-box" style="display: none;">
+            <button class="btn" style="background: #fccb06; color: black;" onclick="copyCode()">COPY CODE</button>
+            <a href="https://reward.ff.garena.com/" target="_blank" class="redeem-link" id="redeem-btn">GO TO OFFICIAL REDEEM SITE</a>
+        </div>
     </div>
 </div>
 
 <script>
     let timeLeft = 30;
-    const timerBox = document.getElementById('timer-box');
+    const timerText = document.getElementById('timer-text');
     const genBtn = document.getElementById('gen-btn');
-    const loader = document.getElementById('loader');
-    const bar = document.getElementById('bar');
-    const loadText = document.getElementById('load-text');
     const resultDisplay = document.getElementById('result-display');
-    const copyBtn = document.getElementById('copy-btn');
+    const loader = document.getElementById('loader');
+    const copyBox = document.getElementById('copy-box');
+    const redeemBtn = document.getElementById('redeem-btn');
 
-    // 1. Countdown Timer
-    const timerInterval = setInterval(() => {
+    // 1. Timer Logic
+    const timer = setInterval(() => {
         timeLeft--;
         document.getElementById('seconds').textContent = timeLeft;
         if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            timerBox.style.display = 'none';
-            genBtn.style.display = 'inline-block';
+            clearInterval(timer);
+            timerText.style.display = 'none';
+            genBtn.style.display = 'block';
         }
     }, 1000);
 
-    // 2. Generation Logic (The "API" Simulation)
-    function startGeneration() {
+    // 2. AI Generation using Groq API
+    async function generateWithAI() {
         genBtn.style.display = 'none';
         loader.style.display = 'block';
-        let progress = 0;
-        
-        const messages = ["Bypassing Security...", "Accessing Database...", "Injecting Packets...", "Generating 12-Digit Key..."];
-        
-        const progressInterval = setInterval(() => {
-            progress += 1;
-            bar.style.width = progress + "%";
-            
-            if(progress < 30) loadText.textContent = messages[0];
-            else if(progress < 60) loadText.textContent = messages[1];
-            else if(progress < 85) loadText.textContent = messages[2];
-            else loadText.textContent = messages[3];
+        resultDisplay.style.display = 'none';
 
-            if (progress >= 100) {
-                clearInterval(progressInterval);
-                showFinalCode();
-            }
-        }, 50); // වේගය මෙතනින් පාලනය කළ හැක
+        const apiKey = "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";
+        
+        try {
+            const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
+                method: "POST",
+                headers: {
+                    "Authorization": `Bearer ${apiKey}`,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    model: "llama3-8b-8192",
+                    messages: [{ role: "user", content: "Generate one random 12-character alphanumeric string for a game reward code. Give only the code, no text." }]
+                })
+            });
+
+            const data = await response.json();
+            let aiCode = data.choices[0].message.content.trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
+            
+            // අකුරු 12ක්ම තියෙනවාදැයි තහවුරු කිරීම
+            if(aiCode.length > 12) aiCode = aiCode.substring(0, 12);
+            
+            // Format to XXXX-XXXX-XXXX
+            const finalCode = aiCode.match(/.{1,4}/g).join('-');
+
+            loader.style.display = 'none';
+            resultDisplay.textContent = finalCode;
+            resultDisplay.style.display = 'block';
+            copyBox.style.display = 'block';
+            redeemBtn.style.display = 'block';
+
+        } catch (error) {
+            console.error("Error:", error);
+            // API එකේ අවුලක් වුණොත් Backup එකක් විදිහට මේක වැඩ කරයි
+            loader.textContent = "AI Busy. Using Backup Server...";
+            setTimeout(() => {
+                showBackupCode();
+            }, 1500);
+        }
     }
 
-    // 3. 12-Digit Generator
-    function showFinalCode() {
-        loader.style.display = 'none';
-        
+    function showBackupCode() {
         const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         let code = "";
-        
-        // අකුරු 12ක් සාදයි (Format: XXXX-XXXX-XXXX)
         for (let i = 0; i < 12; i++) {
             if (i > 0 && i % 4 === 0) code += "-";
             code += chars.charAt(Math.floor(Math.random() * chars.length));
         }
-        
+        loader.style.display = 'none';
         resultDisplay.textContent = code;
         resultDisplay.style.display = 'block';
-        copyBtn.style.display = 'inline-block';
+        copyBox.style.display = 'block';
+        redeemBtn.style.display = 'block';
     }
 
     function copyCode() {
         navigator.clipboard.writeText(resultDisplay.textContent);
-        alert("12-Digit Code Copied Successfully!");
+        alert("Code Copied! Now clicking the link to redeem.");
     }
 </script>
 
-</body>
-</html>
-        loadingText.style.display = 'block';
-
-        // Fake loading effect for 2 seconds
-        setTimeout(() => {
-            loadingText.style.display = 'none';
-            
-            // Generate Random Code like FF (e.g., FFG3-8KLS-92MS)
-            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            let part1 = "FFG";
-            let part2 = "";
-            let part3 = "";
-            
-            for(let i=0; i<4; i++) part2 += chars.charAt(Math.floor(Math.random() * chars.length));
-            for(let i=0; i<4; i++) part3 += chars.charAt(Math.floor(Math.random() * chars.length));
-            
-            const finalCode = `${part1}-${part2}-${part3}`;
-            
-            codeDisplay.textContent = finalCode;
-            codeDisplay.style.display = 'block';
-            copyBtn.style.display = 'inline-block';
-        }, 2000);
-    }
-
-    // 3. Copy Logic
-    function copyToClipboard() {
-        const text = codeDisplay.textContent;
-        navigator.clipboard.writeText(text).then(() => {
-            alert("Code Copied: " + text + "\nNow go to Rewards Site and Redeem!");
-        });
-    }
-</script>
-
-</body>
-</html>
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>DULA FF GAMING</h1>
-        <p>Premium Files & Sensitivity Settings</p>
-    </header>
-    <div class="container">
-        <h2>Download Latest Mod Menu</h2>
-        <div class="ad-slot">
-            <p style="color: #c5c6c7;">Advertisement</p>
-        </div>
-        <br><br>
-        <a href="#" class="btn">DOWNLOAD NOW</a>
-    </div>
 </body>
 </html>
