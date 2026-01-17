@@ -3,37 +3,98 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DULA FF - Gaming Hub</title>
+    <title>DULA FF - Code Generator</title>
     <style>
-        body {
-            background-color: #0b0c10;
-            color: #66fcf1;
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            text-align: center;
-        }
-        header {
-            background: linear-gradient(90deg, #1f2833, #45a29e);
-            padding: 50px 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-        }
-        .container { padding: 50px; }
-        .btn {
-            background-color: #45a29e;
-            color: white;
-            padding: 15px 30px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: bold;
-            transition: 0.3s;
-        }
+        body { background-color: #0b0c10; color: #66fcf1; font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; }
+        header { background: linear-gradient(90deg, #1f2833, #45a29e); padding: 50px 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
+        .container { padding: 30px; }
+        .giveaway-box { background: #1f2833; padding: 25px; border-radius: 15px; border: 2px solid #45a29e; max-width: 450px; margin: 20px auto; box-shadow: 0 0 20px rgba(69, 162, 158, 0.2); }
+        .btn { background-color: #45a29e; color: white; padding: 12px 25px; border: none; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 16px; }
         .btn:hover { background-color: #66fcf1; color: black; }
-        .ad-slot {
-            margin: 20px auto;
-            width: 300px;
-            height: 250px;
-            background: #1f2833;
-            border: 1px dashed #66fcf1;
+        #generated-code { color: #fff; font-size: 28px; font-weight: bold; letter-spacing: 2px; margin: 15px 0; display: none; background: rgba(0,0,0,0.3); padding: 10px; border: 1px dashed #66fcf1; }
+        .loading { color: #fccb06; font-style: italic; display: none; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>DULA FF GAMING</h1>
+    <p>Daily Redeem Code Generator</p>
+</header>
+
+<div class="container">
+    <div class="giveaway-box">
+        <h3>🎁 Get Your Redeem Code</h3>
+        
+        <p id="timer-text">Please wait <span id="seconds" style="font-weight: bold; color: #ff4c4c;">30</span> seconds to activate generator...</p>
+
+        <button id="gen-btn" class="btn" style="display: none;" onclick="generateNow()">GENERATE CODE</button>
+        
+        <p id="loading-text" class="loading">Generating... Please wait...</p>
+        
+        <div id="generated-code"></div>
+        
+        <button id="copy-btn" class="btn" style="display: none; margin-top: 10px; background: #66fcf1; color: black;" onclick="copyToClipboard()">COPY & REDEEM</button>
+    </div>
+</div>
+
+<script>
+    let timeLeft = 30;
+    const timerSpan = document.getElementById('seconds');
+    const timerText = document.getElementById('timer-text');
+    const genBtn = document.getElementById('gen-btn');
+    const loadingText = document.getElementById('loading-text');
+    const codeDisplay = document.getElementById('generated-code');
+    const copyBtn = document.getElementById('copy-btn');
+
+    // 1. Timer Countdown
+    const countdown = setInterval(function() {
+        timeLeft--;
+        timerSpan.textContent = timeLeft;
+        if (timeLeft <= 0) {
+            clearInterval(countdown);
+            timerText.style.display = 'none';
+            genBtn.style.display = 'inline-block';
+        }
+    }, 1000);
+
+    // 2. Code Generation Logic
+    function generateNow() {
+        genBtn.style.display = 'none';
+        loadingText.style.display = 'block';
+
+        // Fake loading effect for 2 seconds
+        setTimeout(() => {
+            loadingText.style.display = 'none';
+            
+            // Generate Random Code like FF (e.g., FFG3-8KLS-92MS)
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            let part1 = "FFG";
+            let part2 = "";
+            let part3 = "";
+            
+            for(let i=0; i<4; i++) part2 += chars.charAt(Math.floor(Math.random() * chars.length));
+            for(let i=0; i<4; i++) part3 += chars.charAt(Math.floor(Math.random() * chars.length));
+            
+            const finalCode = `${part1}-${part2}-${part3}`;
+            
+            codeDisplay.textContent = finalCode;
+            codeDisplay.style.display = 'block';
+            copyBtn.style.display = 'inline-block';
+        }, 2000);
+    }
+
+    // 3. Copy Logic
+    function copyToClipboard() {
+        const text = codeDisplay.textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            alert("Code Copied: " + text + "\nNow go to Rewards Site and Redeem!");
+        });
+    }
+</script>
+
+</body>
+</html>
             display: flex;
             align-items: center;
             justify-content: center;
