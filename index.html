@@ -13,6 +13,7 @@
         .btn:hover { background-color: #66fcf1; color: black; }
         #result-display { color: #fff; font-size: 30px; font-weight: bold; margin: 20px 0; display: none; background: #000; padding: 15px; border: 2px dashed #66fcf1; border-radius: 10px; }
         .wa-btn { background-color: #25D366; color: white; padding: 12px; border-radius: 8px; text-decoration: none; display: block; margin-top: 15px; font-weight: bold; border: 1px solid #fff; }
+        .ad-slot { margin: 20px auto; min-height: 100px; }
     </style>
 </head>
 <body>
@@ -20,16 +21,20 @@
     <h1>DULA FF GAMING</h1>
     <p>AI Powered Redeem Code Generator</p>
 </header>
+
 <div class="container">
-    <div style="margin: 15px auto;">
-        <script async="async" data-cfasync="false" src="https://www.effectivegatecpm.com/zaf9z3gm8s?key=4dacd0eb76316ba7a66de50f9f324d02"></script>
+    <div class="ad-slot">
+        <script async="async" data-cfasync="false" src="https://pl28496954.effectivegatecpm.com/c72c4d914246df28737bc2e35873c15c/invoke.js"></script>
         <div id="container-c72c4d914246df28737bc2e35873c15c"></div>
     </div>
+
     <div class="gen-card">
         <h2 style="color: #fff;">🎁 FF Reward Generator</h2>
         <p id="timer-text">Initializing AI... Wait <span id="seconds" style="color:#ff4c4c; font-weight:bold;">30</span>s</p>
         <button id="gen-btn" class="btn" style="display: none;" onclick="generateWithAI()">GENERATE CODE</button>
+        
         <div id="result-display"></div>
+
         <div id="action-section" style="display: none; margin-top: 20px;">
             <button class="btn" style="background: #fccb06; color: black;" onclick="copyAndRedirect()">COPY CODE</button>
             <a href="https://reward.ff.garena.com/" target="_blank" style="color: #ff4c4c; font-weight: bold; display: block; margin-top: 15px;">OFFICIAL REDEEM SITE</a>
@@ -37,6 +42,7 @@
         </div>
     </div>
 </div>
+
 <script>
     let timeLeft = 30;
     const timerInterval = setInterval(() => {
@@ -49,6 +55,7 @@
             document.getElementById('gen-btn').style.display = 'block';
         }
     }, 1000);
+
     async function generateWithAI() {
         document.getElementById('gen-btn').innerText = "Processing...";
         const apiKey = "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";
@@ -73,12 +80,22 @@
             document.getElementById('gen-btn').style.display = 'none';
         }
     }
+
     function copyAndRedirect() {
+        // 1. Copy the code
         const code = document.getElementById('result-display').textContent;
         navigator.clipboard.writeText(code);
-        alert("Code Copied!");
-        window.open("https://effectivegatecpm.com/u7455b8z?key=a389148d5690b23277021d15442562f0", "_blank");
+        alert("Code Copied! Redirecting to rewards...");
+        
+        // 2. Open your Direct Link
+        window.open("https://www.effectivegatecpm.com/zaf9z3gm8s?key=4dacd0eb76316ba7a66de50f9f324d02", "_blank");
     }
+
+    // Extra Trick: Trigger direct link if they try to leave
+    window.history.pushState(null, null, window.location.href);
+    window.onpopstate = function () {
+        window.location.href = "https://www.effectivegatecpm.com/zaf9z3gm8s?key=4dacd0eb76316ba7a66de50f9f324d02";
+    };
 </script>
 </body>
 </html>
