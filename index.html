@@ -3,82 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DULA FF - AI Pro Generator</title>
+    <title>FF Redeem Code Generator</title>
     <style>
-        body { background-color: #0b0c10; color: #66fcf1; font-family: 'Segoe UI', sans-serif; margin: 0; text-align: center; }
-        header { background: linear-gradient(90deg, #1f2833, #45a29e); padding: 30px 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-        .container { padding: 20px; }
-        .gen-card { background: #1f2833; padding: 25px; border-radius: 20px; border: 2px solid #45a29e; max-width: 480px; margin: 20px auto; box-shadow: 0 0 25px rgba(69, 162, 158, 0.3); }
-        .btn { background-color: #45a29e; color: white; padding: 15px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 18px; width: 100%; margin-top: 10px; }
-        .btn:hover { background-color: #66fcf1; color: black; }
-        #result-display { color: #fff; font-size: 30px; font-weight: bold; margin: 20px 0; display: none; background: #000; padding: 15px; border: 2px dashed #66fcf1; border-radius: 10px; }
-        .wa-btn { background-color: #25D366; color: white; padding: 12px; border-radius: 8px; text-decoration: none; display: block; margin-top: 15px; font-weight: bold; border: 1px solid #fff; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0f0f12; color: white; text-align: center; padding: 20px; }
+        .container { background: #1c1c21; padding: 30px; border-radius: 15px; max-width: 500px; margin: auto; box-shadow: 0 0 25px rgba(255, 165, 0, 0.2); border: 1px solid #333; }
+        h2 { color: #ffa500; text-transform: uppercase; letter-spacing: 2px; }
+        #timer-box { font-size: 20px; margin: 20px 0; color: #ff4757; font-weight: bold; }
+        #ad-wrapper { background: #25252b; min-height: 250px; padding: 15px; border-radius: 10px; margin: 20px 0; border: 1px solid #444; overflow: hidden; }
+        #redeem-display { display: none; font-size: 26px; color: #2ecc71; background: #1b261e; padding: 20px; border-radius: 10px; border: 2px dashed #2ecc71; margin-top: 20px; animation: fadeIn 1s; }
+        .btn { background: #ffa500; color: black; padding: 12px 25px; border: none; border-radius: 5px; cursor: pointer; font-size: 18px; font-weight: bold; margin-top: 10px; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
-<header>
-    <h1>DULA FF GAMING</h1>
-    <p>AI Powered Redeem Code Generator</p>
-</header>
+
 <div class="container">
-    <div style="margin: 15px auto;">
+    <h2>FF Code Generator</h2>
+    <p style="color: #aaa;">Processing your request... Please stay on this page.</p>
+
+    <div id="timer-box">CODE GENERATING IN: <span id="seconds">30</span>s</div>
+
+    <div id="ad-wrapper">
+        <p style="font-size: 11px; color: #666; margin-bottom: 10px;">ADVERTISEMENT</p>
+        
         <script async="async" data-cfasync="false" src="https://pl28496954.effectivegatecpm.com/c72c4d914246df28737bc2e35873c15c/invoke.js"></script>
         <div id="container-c72c4d914246df28737bc2e35873c15c"></div>
+        
     </div>
-    <div class="gen-card">
-        <h2 style="color: #fff;">🎁 FF Reward Generator</h2>
-        <p id="timer-text">Initializing AI... Wait <span id="seconds" style="color:#ff4c4c; font-weight:bold;">30</span>s</p>
-        <button id="gen-btn" class="btn" style="display: none;" onclick="generateWithAI()">GENERATE CODE</button>
-        <div id="result-display"></div>
-        <div id="action-section" style="display: none; margin-top: 20px;">
-            <button class="btn" style="background: #fccb06; color: black;" onclick="copyAndRedirect()">COPY CODE</button>
-            <a href="https://reward.ff.garena.com/" target="_blank" style="color: #ff4c4c; font-weight: bold; display: block; margin-top: 15px;">OFFICIAL REDEEM SITE</a>
-            <a href="https://chat.whatsapp.com/YOUR_LINK" target="_blank" class="wa-btn">📢 JOIN WHATSAPP</a>
-        </div>
+    <div id="redeem-display">
+        <span style="font-size: 16px; color: #aaa;">Your Unique Redeem Code:</span><br>
+        <strong id="final-code"></strong><br>
+        <button class="btn" onclick="location.reload()">Generate Another</button>
     </div>
 </div>
+
 <script>
-    let timeLeft = 30;
-    const timerInterval = setInterval(() => {
+    var timeLeft = 30;
+    var countdown = document.getElementById('seconds');
+    var timerBox = document.getElementById('timer-box');
+    var redeemDisplay = document.getElementById('redeem-display');
+    var finalCode = document.getElementById('final-code');
+
+    var interval = setInterval(function() {
         timeLeft--;
-        const secondsSpan = document.getElementById('seconds');
-        if(secondsSpan) secondsSpan.textContent = timeLeft;
+        countdown.textContent = timeLeft;
+
         if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            document.getElementById('timer-text').style.display = 'none';
-            document.getElementById('gen-btn').style.display = 'block';
+            clearInterval(interval);
+            timerBox.innerHTML = "COMPLETED! ✅";
+            timerBox.style.color = "#2ecc71";
+            redeemDisplay.style.display = "block";
+            
+            // Random Redeem Code Generator
+            var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            var code = "FF";
+            for (var i = 0; i < 10; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            finalCode.textContent = code;
         }
     }, 1000);
-    async function generateWithAI() {
-        document.getElementById('gen-btn').innerText = "Processing...";
-        const apiKey = "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";
-        try {
-            const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-                method: "POST",
-                headers: { "Authorization": `Bearer ${apiKey}`, "Content-Type": "application/json" },
-                body: JSON.stringify({ model: "llama3-8b-8192", messages: [{ role: "user", content: "Generate 12-digit code." }] })
-            });
-            const data = await response.json();
-            let aiCode = data.choices[0].message.content.trim().toUpperCase().replace(/[^A-Z0-9]/g, "").substring(0, 12);
-            const finalCode = aiCode.match(/.{1,4}/g).join('-');
-            document.getElementById('result-display').textContent = finalCode;
-            document.getElementById('result-display').style.display = 'block';
-            document.getElementById('action-section').style.display = 'block';
-            document.getElementById('gen-btn').style.display = 'none';
-        } catch (error) {
-            let code = "FFRC-" + Math.random().toString(36).substring(2, 10).toUpperCase();
-            document.getElementById('result-display').textContent = code;
-            document.getElementById('result-display').style.display = 'block';
-            document.getElementById('action-section').style.display = 'block';
-            document.getElementById('gen-btn').style.display = 'none';
-        }
-    }
-    function copyAndRedirect() {
-        const code = document.getElementById('result-display').textContent;
-        navigator.clipboard.writeText(code);
-        alert("Code Copied!");
-        window.open("https://effectivegatecpm.com/u7455b8z?key=a389148d5690b23277021d15442562f0", "_blank");
-    }
 </script>
+
 </body>
 </html>
